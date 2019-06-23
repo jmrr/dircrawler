@@ -1,5 +1,6 @@
 const fs = require("fs").promises;
 const path = require("path");
+const argv = require("yargs").argv;
 
 const entrypoint = "ABS_PATH";
 
