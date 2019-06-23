@@ -1,8 +1,15 @@
 const fs = require("fs").promises;
 const path = require("path");
-const argv = require("yargs").argv;
+const yargs = require("yargs");
 
-const entrypoint = "ABS_PATH";
+// Build the command:
+
+const argv = yargs
+  .usage("Usage $0 --photosdir='/home/johnsmith/myphotos'")
+  .describe("photosdir", "Absolute path for your photo collection")
+  .demandOption("photosdir").argv;
+
+const entrypoint = argv.photosdir;
 
 const walk = async (dir, filelist = []) => {
   const files = await fs.readdir(dir);
