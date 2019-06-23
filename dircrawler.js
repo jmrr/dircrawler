@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const yargs = require("yargs");
 
-// Build the command:
+// Build the CLI:
 const argv = yargs
   .usage(
     "Usage $0 --photosdir='/home/johnsmith/myphotos' --output='photo_paths.txt'"

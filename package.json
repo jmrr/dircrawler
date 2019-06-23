@@ -1,7 +1,7 @@
 {
-  "name": "google-photos-backup",
+  "name": "dircrawler",
   "version": "0.0.1",
-  "description": "A small tool to back up a list of directories containing photos to Google Photos",
+  "description": "A small tool to retrieve list of directories under a parent one.",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
