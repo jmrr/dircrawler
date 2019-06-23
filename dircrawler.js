@@ -1,34 +1,41 @@
-const fs = require("fs").promises;
+const fs = require("fs");
 const path = require("path");
 const yargs = require("yargs");
 
 // Build the command:
-
 const argv = yargs
-  .usage("Usage $0 --photosdir='/home/johnsmith/myphotos'")
-  .describe("photosdir", "Absolute path for your photo collection")
+  .usage(
+    "Usage $0 --photosdir='/home/johnsmith/myphotos' --output='photo_paths.txt'"
+  )
+  .describe("photosdir", "Absolute path for your photo collection.")
+  .describe("output", "File where to write the photo dirs.")
+  .default("output", "output.txt")
   .demandOption("photosdir").argv;
 
 const entrypoint = argv.photosdir;
 
-const walk = async (dir, filelist = []) => {
-  const files = await fs.readdir(dir);
+const walk = async (dir, dirlist = []) => {
+  const files = await fs.promises.readdir(dir);
 
   for (file of files) {
     const filepath = path.join(dir, file);
-    const stat = await fs.stat(filepath);
+    const stat = await fs.promises.stat(filepath);
 
     if (stat.isDirectory()) {
-      filelist.push(file);
+      dirlist.push(file);
       const absPath = path.join(dir, file);
-      console.log(absPath.split(entrypoint).pop());
-      filelist = await walk(filepath, filelist);
+      const retrievedDir = absPath.split(entrypoint).pop();
+      fs.promises.appendFile(argv.output, `${retrievedDir}\n`);
+      console.log(retrievedDir);
+      dirlist = await walk(filepath, dirlist);
     }
   }
 
-  return filelist;
+  return dirlist;
 };
 
-const filelist = walk(entrypoint);
-
-console.log(filelist);
+// Retrieve tree structure
+walk(entrypoint).then(resultDirList => {
+  // Save file list
+  console.log(`Retrieved ${resultDirList.length} directories`);
+});
